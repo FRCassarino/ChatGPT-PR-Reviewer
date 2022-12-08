@@ -1,5 +1,6 @@
 # Import the Chatbot class from the revChatGPT package
 from revChatGPT.revChatGPT import Chatbot
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Define the configuration for the Chatbot
 # Replace the placeholder values with your own email, password, and/or session token
@@ -16,23 +17,549 @@ chatbot = Chatbot(config)
 def handle_webhook(request):
   # Extract the pull request data from the request
   print(request)
-  pull_request = request['json']
-
-  # Use the Chatbot to generate a review for the pull request
-  review = chatbot.get_chat_response(pull_request['body'])['message']
-
-  # Print the review to the console
-  print(review)
-  print("The end.")
-
-  return "Success"
 
 
 request = {
-  "json": {
-    "body": "This is a sample pull request for testing purposes."
+  "action": "closed",
+  "number": 1,
+  "pull_request": {
+    "url": "https://api.github.com/repos/FRCassarino/testPRAI/pulls/1",
+    "id": 1152426831,
+    "node_id": "PR_kwDOIk6C1s5EsKNP",
+    "html_url": "https://github.com/FRCassarino/testPRAI/pull/1",
+    "diff_url": "https://github.com/FRCassarino/testPRAI/pull/1.diff",
+    "patch_url": "https://github.com/FRCassarino/testPRAI/pull/1.patch",
+    "issue_url": "https://api.github.com/repos/FRCassarino/testPRAI/issues/1",
+    "number": 1,
+    "state": "closed",
+    "locked": 0,
+    "title": "Create output-2",
+    "user": {
+      "login": "FRCassarino",
+      "id": 6242616,
+      "node_id": "MDQ6VXNlcjYyNDI2MTY=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6242616?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/FRCassarino",
+      "html_url": "https://github.com/FRCassarino",
+      "followers_url": "https://api.github.com/users/FRCassarino/followers",
+      "following_url":
+      "https://api.github.com/users/FRCassarino/following{/other_user}",
+      "gists_url": "https://api.github.com/users/FRCassarino/gists{/gist_id}",
+      "starred_url":
+      "https://api.github.com/users/FRCassarino/starred{/owner}{/repo}",
+      "subscriptions_url":
+      "https://api.github.com/users/FRCassarino/subscriptions",
+      "organizations_url": "https://api.github.com/users/FRCassarino/orgs",
+      "repos_url": "https://api.github.com/users/FRCassarino/repos",
+      "events_url":
+      "https://api.github.com/users/FRCassarino/events{/privacy}",
+      "received_events_url":
+      "https://api.github.com/users/FRCassarino/received_events",
+      "type": "User",
+      "site_admin": 0
+    },
+    "body": "aasdfdsaf",
+    "created_at": "2022-12-07T21:06:23Z",
+    "updated_at": "2022-12-08T22:40:17Z",
+    "closed_at": "2022-12-08T22:40:17Z",
+    "merge_commit_sha": "5a3f0f2465719b93c6f5294cdba0f5d216fc1e7f",
+    "assignees": [],
+    "requested_reviewers": [],
+    "requested_teams": [],
+    "commits_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/pulls/1/commits",
+    "review_comments_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/pulls/1/comments",
+    "review_comment_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/pulls/comments{/number}",
+    "comments_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/issues/1/comments",
+    "statuses_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/statuses/58c2c5972e727f4dbc9992acf1f0cb180bda86af",
+    "head": {
+      "label": "FRCassarino:test",
+      "ref": "test",
+      "sha": "58c2c5972e727f4dbc9992acf1f0cb180bda86af",
+      "user": {
+        "login": "FRCassarino",
+        "id": 6242616,
+        "node_id": "MDQ6VXNlcjYyNDI2MTY=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6242616?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/FRCassarino",
+        "html_url": "https://github.com/FRCassarino",
+        "followers_url": "https://api.github.com/users/FRCassarino/followers",
+        "following_url":
+        "https://api.github.com/users/FRCassarino/following{/other_user}",
+        "gists_url":
+        "https://api.github.com/users/FRCassarino/gists{/gist_id}",
+        "starred_url":
+        "https://api.github.com/users/FRCassarino/starred{/owner}{/repo}",
+        "subscriptions_url":
+        "https://api.github.com/users/FRCassarino/subscriptions",
+        "organizations_url": "https://api.github.com/users/FRCassarino/orgs",
+        "repos_url": "https://api.github.com/users/FRCassarino/repos",
+        "events_url":
+        "https://api.github.com/users/FRCassarino/events{/privacy}",
+        "received_events_url":
+        "https://api.github.com/users/FRCassarino/received_events",
+        "type": "User",
+      },
+      "repo": {
+        "id": 575570646,
+        "node_id": "R_kgDOIk6C1g",
+        "name": "testPRAI",
+        "full_name": "FRCassarino/testPRAI",
+        "owner": {
+          "login": "FRCassarino",
+          "id": 6242616,
+          "node_id": "MDQ6VXNlcjYyNDI2MTY=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/6242616?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/FRCassarino",
+          "html_url": "https://github.com/FRCassarino",
+          "followers_url":
+          "https://api.github.com/users/FRCassarino/followers",
+          "following_url":
+          "https://api.github.com/users/FRCassarino/following{/other_user}",
+          "gists_url":
+          "https://api.github.com/users/FRCassarino/gists{/gist_id}",
+          "starred_url":
+          "https://api.github.com/users/FRCassarino/starred{/owner}{/repo}",
+          "subscriptions_url":
+          "https://api.github.com/users/FRCassarino/subscriptions",
+          "organizations_url": "https://api.github.com/users/FRCassarino/orgs",
+          "repos_url": "https://api.github.com/users/FRCassarino/repos",
+          "events_url":
+          "https://api.github.com/users/FRCassarino/events{/privacy}",
+          "received_events_url":
+          "https://api.github.com/users/FRCassarino/received_events",
+          "type": "User",
+        },
+        "url": "https://api.github.com/repos/FRCassarino/testPRAI",
+        "forks_url": "https://api.github.com/repos/FRCassarino/testPRAI/forks",
+        "keys_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/keys{/key_id}",
+        "collaborators_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/FRCassarino/testPRAI/teams",
+        "hooks_url": "https://api.github.com/repos/FRCassarino/testPRAI/hooks",
+        "issue_events_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/issues/events{/number}",
+        "events_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/events",
+        "assignees_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/assignees{/user}",
+        "branches_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/FRCassarino/testPRAI/tags",
+        "blobs_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/blobs{/sha}",
+        "git_tags_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/tags{/sha}",
+        "git_refs_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/refs{/sha}",
+        "trees_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/trees{/sha}",
+        "statuses_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/statuses/{sha}",
+        "languages_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/languages",
+        "stargazers_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/stargazers",
+        "contributors_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/contributors",
+        "subscribers_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/subscribers",
+        "subscription_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/subscription",
+        "commits_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/commits{/sha}",
+        "git_commits_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/commits{/sha}",
+        "comments_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/comments{/number}",
+        "issue_comment_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/issues/comments{/number}",
+        "contents_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/contents/{+path}",
+        "compare_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/compare/{base}...{head}",
+        "merges_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/merges",
+        "archive_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/{archive_format}{/ref}",
+        "downloads_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/downloads",
+        "issues_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/issues{/number}",
+        "pulls_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/pulls{/number}",
+        "milestones_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/milestones{/number}",
+        "notifications_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/notifications{?since,all,participating}",
+        "labels_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/labels{/name}",
+        "releases_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/releases{/id}",
+        "deployments_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/deployments",
+        "created_at": "2022-12-07T20:13:34Z",
+        "updated_at": "2022-12-07T20:13:34Z",
+        "pushed_at": "2022-12-07T21:06:23Z",
+        "git_url": "git://github.com/FRCassarino/testPRAI.git",
+        "ssh_url": "git@github.com:FRCassarino/testPRAI.git",
+        "clone_url": "https://github.com/FRCassarino/testPRAI.git",
+        "svn_url": "https://github.com/FRCassarino/testPRAI",
+        "size": 315,
+        "stargazers_count": 0,
+        "watchers_count": 0,
+        "squash_merge_commit_message": "COMMIT_MESSAGES",
+        "squash_merge_commit_title": "COMMIT_OR_PR_TITLE",
+        "merge_commit_message": "PR_TITLE",
+        "merge_commit_title": "MERGE_MESSAGE"
+      }
+    },
+    "base": {
+      "label": "FRCassarino:main",
+      "ref": "main",
+      "sha": "3406b7c255f72d81d8c648a55c3666b7b00e86fb",
+      "user": {
+        "login": "FRCassarino",
+        "id": 6242616,
+        "node_id": "MDQ6VXNlcjYyNDI2MTY=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6242616?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/FRCassarino",
+        "html_url": "https://github.com/FRCassarino",
+        "followers_url": "https://api.github.com/users/FRCassarino/followers",
+        "following_url":
+        "https://api.github.com/users/FRCassarino/following{/other_user}",
+        "gists_url":
+        "https://api.github.com/users/FRCassarino/gists{/gist_id}",
+        "starred_url":
+        "https://api.github.com/users/FRCassarino/starred{/owner}{/repo}",
+        "subscriptions_url":
+        "https://api.github.com/users/FRCassarino/subscriptions",
+        "organizations_url": "https://api.github.com/users/FRCassarino/orgs",
+        "repos_url": "https://api.github.com/users/FRCassarino/repos",
+        "events_url":
+        "https://api.github.com/users/FRCassarino/events{/privacy}",
+        "received_events_url":
+        "https://api.github.com/users/FRCassarino/received_events",
+        "type": "User",
+      },
+      "repo": {
+        "id": 575570646,
+        "node_id": "R_kgDOIk6C1g",
+        "name": "testPRAI",
+        "full_name": "FRCassarino/testPRAI",
+        "owner": {
+          "login": "FRCassarino",
+          "id": 6242616,
+          "node_id": "MDQ6VXNlcjYyNDI2MTY=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/6242616?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/FRCassarino",
+          "html_url": "https://github.com/FRCassarino",
+          "followers_url":
+          "https://api.github.com/users/FRCassarino/followers",
+          "following_url":
+          "https://api.github.com/users/FRCassarino/following{/other_user}",
+          "gists_url":
+          "https://api.github.com/users/FRCassarino/gists{/gist_id}",
+          "starred_url":
+          "https://api.github.com/users/FRCassarino/starred{/owner}{/repo}",
+          "subscriptions_url":
+          "https://api.github.com/users/FRCassarino/subscriptions",
+          "organizations_url": "https://api.github.com/users/FRCassarino/orgs",
+          "repos_url": "https://api.github.com/users/FRCassarino/repos",
+          "events_url":
+          "https://api.github.com/users/FRCassarino/events{/privacy}",
+          "received_events_url":
+          "https://api.github.com/users/FRCassarino/received_events",
+          "type": "User",
+        },
+        "html_url": "https://github.com/FRCassarino/testPRAI",
+        "url": "https://api.github.com/repos/FRCassarino/testPRAI",
+        "forks_url": "https://api.github.com/repos/FRCassarino/testPRAI/forks",
+        "keys_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/keys{/key_id}",
+        "collaborators_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/FRCassarino/testPRAI/teams",
+        "hooks_url": "https://api.github.com/repos/FRCassarino/testPRAI/hooks",
+        "issue_events_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/issues/events{/number}",
+        "events_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/events",
+        "assignees_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/assignees{/user}",
+        "branches_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/FRCassarino/testPRAI/tags",
+        "blobs_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/blobs{/sha}",
+        "git_tags_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/tags{/sha}",
+        "git_refs_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/refs{/sha}",
+        "trees_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/trees{/sha}",
+        "statuses_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/statuses/{sha}",
+        "languages_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/languages",
+        "stargazers_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/stargazers",
+        "contributors_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/contributors",
+        "subscribers_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/subscribers",
+        "subscription_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/subscription",
+        "commits_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/commits{/sha}",
+        "git_commits_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/git/commits{/sha}",
+        "comments_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/comments{/number}",
+        "issue_comment_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/issues/comments{/number}",
+        "contents_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/contents/{+path}",
+        "compare_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/compare/{base}...{head}",
+        "merges_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/merges",
+        "archive_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/{archive_format}{/ref}",
+        "downloads_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/downloads",
+        "issues_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/issues{/number}",
+        "pulls_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/pulls{/number}",
+        "milestones_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/milestones{/number}",
+        "notifications_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/notifications{?since,all,participating}",
+        "labels_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/labels{/name}",
+        "releases_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/releases{/id}",
+        "deployments_url":
+        "https://api.github.com/repos/FRCassarino/testPRAI/deployments",
+        "created_at": "2022-12-07T20:13:34Z",
+        "updated_at": "2022-12-07T20:13:34Z",
+        "pushed_at": "2022-12-07T21:06:23Z",
+        "git_url": "git://github.com/FRCassarino/testPRAI.git",
+        "ssh_url": "git@github.com:FRCassarino/testPRAI.git",
+        "clone_url": "https://github.com/FRCassarino/testPRAI.git",
+        "svn_url": "https://github.com/FRCassarino/testPRAI",
+        "squash_merge_commit_title": "COMMIT_OR_PR_TITLE",
+        "merge_commit_message": "PR_TITLE",
+        "merge_commit_title": "MERGE_MESSAGE"
+      }
+    },
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/FRCassarino/testPRAI/pulls/1"
+      },
+      "html": {
+        "href": "https://github.com/FRCassarino/testPRAI/pull/1"
+      },
+      "issue": {
+        "href": "https://api.github.com/repos/FRCassarino/testPRAI/issues/1"
+      },
+      "comments": {
+        "href":
+        "https://api.github.com/repos/FRCassarino/testPRAI/issues/1/comments"
+      },
+      "review_comments": {
+        "href":
+        "https://api.github.com/repos/FRCassarino/testPRAI/pulls/1/comments"
+      },
+      "review_comment": {
+        "href":
+        "https://api.github.com/repos/FRCassarino/testPRAI/pulls/comments{/number}"
+      },
+      "commits": {
+        "href":
+        "https://api.github.com/repos/FRCassarino/testPRAI/pulls/1/commits"
+      },
+      "statuses": {
+        "href":
+        "https://api.github.com/repos/FRCassarino/testPRAI/statuses/58c2c5972e727f4dbc9992acf1f0cb180bda86af"
+      }
+    },
+    "author_association": "OWNER",
+    "commits": 1,
+    "additions": 0,
+    "deletions": 0,
+    "changed_files": 1
+  },
+  "repository": {
+    "id": 575570646,
+    "node_id": "R_kgDOIk6C1g",
+    "name": "testPRAI",
+    "full_name": "FRCassarino/testPRAI",
+    "owner": {
+      "login": "FRCassarino",
+      "id": 6242616,
+      "node_id": "MDQ6VXNlcjYyNDI2MTY=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6242616?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/FRCassarino",
+      "html_url": "https://github.com/FRCassarino",
+      "followers_url": "https://api.github.com/users/FRCassarino/followers",
+      "following_url":
+      "https://api.github.com/users/FRCassarino/following{/other_user}",
+      "gists_url": "https://api.github.com/users/FRCassarino/gists{/gist_id}",
+      "starred_url":
+      "https://api.github.com/users/FRCassarino/starred{/owner}{/repo}",
+      "subscriptions_url":
+      "https://api.github.com/users/FRCassarino/subscriptions",
+      "organizations_url": "https://api.github.com/users/FRCassarino/orgs",
+      "repos_url": "https://api.github.com/users/FRCassarino/repos",
+      "events_url":
+      "https://api.github.com/users/FRCassarino/events{/privacy}",
+      "received_events_url":
+      "https://api.github.com/users/FRCassarino/received_events",
+      "type": "User",
+    },
+    "html_url": "https://github.com/FRCassarino/testPRAI",
+    "url": "https://api.github.com/repos/FRCassarino/testPRAI",
+    "forks_url": "https://api.github.com/repos/FRCassarino/testPRAI/forks",
+    "keys_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/keys{/key_id}",
+    "collaborators_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/FRCassarino/testPRAI/teams",
+    "hooks_url": "https://api.github.com/repos/FRCassarino/testPRAI/hooks",
+    "issue_events_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/FRCassarino/testPRAI/events",
+    "assignees_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/assignees{/user}",
+    "branches_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/FRCassarino/testPRAI/tags",
+    "blobs_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/git/blobs{/sha}",
+    "git_tags_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/git/tags{/sha}",
+    "git_refs_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/git/refs{/sha}",
+    "trees_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/git/trees{/sha}",
+    "statuses_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/statuses/{sha}",
+    "languages_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/languages",
+    "stargazers_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/stargazers",
+    "contributors_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/contributors",
+    "subscribers_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/subscribers",
+    "subscription_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/subscription",
+    "commits_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/commits{/sha}",
+    "git_commits_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/git/commits{/sha}",
+    "comments_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/comments{/number}",
+    "issue_comment_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/issues/comments{/number}",
+    "contents_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/contents/{+path}",
+    "compare_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/FRCassarino/testPRAI/merges",
+    "archive_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/{archive_format}{/ref}",
+    "downloads_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/downloads",
+    "issues_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/issues{/number}",
+    "pulls_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/pulls{/number}",
+    "milestones_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/milestones{/number}",
+    "notifications_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/notifications{?since,all,participating}",
+    "labels_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/labels{/name}",
+    "releases_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/releases{/id}",
+    "deployments_url":
+    "https://api.github.com/repos/FRCassarino/testPRAI/deployments",
+    "created_at": "2022-12-07T20:13:34Z",
+    "updated_at": "2022-12-07T20:13:34Z",
+    "pushed_at": "2022-12-07T21:06:23Z",
+    "git_url": "git://github.com/FRCassarino/testPRAI.git",
+    "ssh_url": "git@github.com:FRCassarino/testPRAI.git",
+    "clone_url": "https://github.com/FRCassarino/testPRAI.git",
+    "svn_url": "https://github.com/FRCassarino/testPRAI",
+    "topics": [],
+    "visibility": "public",
+    "forks": 0,
+    "open_issues": 0,
+    "watchers": 0,
+    "default_branch": "test"
+  },
+  "sender": {
+    "login": "FRCassarino",
+    "id": 6242616,
+    "node_id": "MDQ6VXNlcjYyNDI2MTY=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/6242616?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/FRCassarino",
+    "html_url": "https://github.com/FRCassarino",
+    "followers_url": "https://api.github.com/users/FRCassarino/followers",
+    "following_url":
+    "https://api.github.com/users/FRCassarino/following{/other_user}",
+    "gists_url": "https://api.github.com/users/FRCassarino/gists{/gist_id}",
+    "starred_url":
+    "https://api.github.com/users/FRCassarino/starred{/owner}{/repo}",
+    "subscriptions_url":
+    "https://api.github.com/users/FRCassarino/subscriptions",
+    "organizations_url": "https://api.github.com/users/FRCassarino/orgs",
+    "repos_url": "https://api.github.com/users/FRCassarino/repos",
+    "events_url": "https://api.github.com/users/FRCassarino/events{/privacy}",
+    "received_events_url":
+    "https://api.github.com/users/FRCassarino/received_events",
+    "type": "User",
+  },
+  "installation": {
+    "id": 31969756,
+    "node_id": "MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uMzE5Njk3NTY="
   }
 }
 
-# Pass the mock request to the handle_webhook function
-handle_webhook(request)
+
+# Define a request handler class that passes incoming requests to the handle_webhook function
+class RequestHandler(BaseHTTPRequestHandler):
+
+  def do_POST(self):
+    # Parse the request data
+    data = self.rfile.read(int(self.headers["Content-Length"])).decode()
+
+    # Pass the request data to the handle_webhook function
+    handle_webhook(data)
+
+    # Send a 200 OK response
+    self.send_response(200)
+    self.end_headers()
+
+
+# Create an HTTPServer that listens for incoming requests on localhost port 80
+server = HTTPServer(("localhost", 80), RequestHandler)
+
+# Start the server in an infinite loop
+while True:
+  server.handle_request()

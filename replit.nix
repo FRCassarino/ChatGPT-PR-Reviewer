@@ -1,5 +1,6 @@
 { pkgs }: {
   deps = [
+    pkgs.ngrok-1
     pkgs.python38Full
   ];
   env = {
