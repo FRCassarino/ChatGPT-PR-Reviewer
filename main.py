@@ -1,7 +1,10 @@
+import base64
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from io import BytesIO
 import json
 import requests
-
+from patch import fromstring
+import urllib
 
 # Define the configuration for the Chatbot
 # Replace the placeholder values with your own email, password, and/or session token
@@ -33,7 +36,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
         print("Received POST request")
-        print(data)
 
         # Parse the data as a JSON object
         data = json.loads(data)  
@@ -43,34 +45,51 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # Create the modified files array
         modified_files = self.create_modified_files_array(pull_request)
-
-        print(modified_files)
-
     
         return modified_files
 
     def create_modified_files_array(self, pull_request):
         # Initialize the modified files array
         modified_files = []
-
         # Get the URL of the patch file for the pull request
         patch_url = pull_request['patch_url']
 
-        # Use the patch URL to retrieve the patch file containing the changes made by the pull request
-        patch_file = requests.get(patch_url)
+        # Download the patch file from the URL
+        patch_file = urllib.request.urlopen(patch_url)
 
-        # Parse the patch file to extract the list of modified files
-        for line in patch_file.text.split('\n'):
-          # Check if the line represents a modified file
-          if line.startswith('+++ b/'):
-            # Extract the file name from the line
-            file_name = line[6:]
+        # Parse the patch file using the Patch class
+        patch = fromstring(patch_file.read())
 
-            # Retrieve the full code of the file from the pull request
-            file_code = requests.get(pull_request['url'] + '/files/' + file_name)
+        # Get the repository information from the pull request
+        repo = pull_request['head']['repo']['name']
+        owner = pull_request['user']['login']
 
-            # Add the file code to the modified files array
-            modified_files.append(file_code)
+        # Iterate over the parsed patch file and get the code for each modified file
+        for hunk in patch:
+            # Use the hunk.target attribute to get the path of the modified file
+            print(hunk.target)
+            filename = hunk.target 
+            path = str(filename).split('/')[1]
+            path = path.replace("'", "")
+            print('path is :' +  path)
+           
+            # Use the GitHub API to get the contents of the modified file
+            url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
+            print(url)
+            headers = {'Authorization': f'token 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'}
+            response = requests.get(url, headers=headers)
+            data = response.json()
+            # Decode the base64 encoded content of the file
+            code = base64.b64decode(data['content']).decode('utf-8')
+            print(code)
+
+            # Add the code to the modified files array
+            modified_files.append(code)
+
+        return modified_files
+
 
 httpd = HTTPServer(('localhost', 8000), RequestHandler)
 httpd.serve_forever()
+
+
