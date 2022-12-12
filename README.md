@@ -1,5 +1,5 @@
 # ChatGPT-PR-Reviewer
-Commit history: https://github.com/FRCassarino/ChatGPT-PR-Reviewer/commits/main
+[Commit history](https://github.com/FRCassarino/ChatGPT-PR-Reviewer/commits/main)
 
 A GitHub App that uses ChatGPT to automatically review pull requests and provide detailed feedback on the code changes.
 
