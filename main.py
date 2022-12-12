@@ -9,12 +9,9 @@ from revChatGPT.revChatGPT import Chatbot
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-config = {
-   
-    "session_token": "<SESSION_TOKEN>",
-    "cf_clearance": "<CLOUDFLARE_TOKEN>",
-    "user_agent": "<USER_AGENT_CHROME>",
-}
+# Load the configuration from the JSON file
+with open('config.json', 'r') as config_file:
+  config = json.load(config_file)
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -105,8 +102,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
       chatbot.get_chat_response("We're going to do an exercise. Imagine these are a series of coding files that belong to a Github Pull Request. Please simply write ACKNOWLEDGE, and write a short summary of what each file does. I will send the first file after this message. Please respond now with ACKNOWLEDGE", output="text")
 
-
-
       # Send the modified files to the chatbot
       for file in modified_files:
           print("File: " + file)
@@ -134,7 +129,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
       # Set the request headers
       headers = {
-          'Authorization': 'token <GITHUB_TOKEN>',
+          'Authorization': 'token ' + config["github_token"],
           'Content-Type': 'application/json'
       }
 

@@ -1,0 +1,6 @@
+{
+    "session_token": "<SESSION_TOKEN>",
+    "cf_clearance": "<CLOUDFLARE_TOKEN>",
+    "user_agent": "<USER_AGENT>",
+    "github_token": "<GITHUB_TOKEN>"
+}
