@@ -15,7 +15,7 @@ with open('config.json', 'r') as config_file:
   config = json.load(config_file)
 
 class RequestHandler(BaseHTTPRequestHandler):
-    
+
     def do_POST(self):
         # Get the length of the request body
         content_length = int(self.headers['Content-Length'])
@@ -67,17 +67,15 @@ class RequestHandler(BaseHTTPRequestHandler):
         patch_file = urllib.request.urlopen(patch_url)
 
         # Parse the patch file using the Patch class
-        patch = fromstring(patch_file.read())
+        patch_set = fromstring(patch_file.read())
 
         # Get the repository information from the pull request
         repo = pull_request['head']['repo']['name']
         owner = pull_request['user']['login']
 
-        # Iterate over the parsed patch file and get the code for each modified file
-        for hunk in patch:
+        for patch in patch_set:
 
-            # Use the hunk.target attribute to get the path of the modified file
-            filename = hunk.target.decode('utf-8')
+            filename = patch.target.decode('utf-8')
             
             # Use the GitHub API to get the contents of the modified file
             url = f'https://api.github.com/repos/{owner}/{repo}/contents/main.py'
@@ -90,10 +88,12 @@ class RequestHandler(BaseHTTPRequestHandler):
                 return
 
             # Decode the base64 encoded content of the file
-            code = base64.b64decode(data['content']).decode('utf-8')
+            code = base64.b64decode(data['content']).decode('utf-8').splitlines()
+
+            numbered_code = [f'{i+1} {line}' for i, line in enumerate(code)] 
 
             # Add the filename and code to the modified files array
-            modified_files.append('File:' + filename + '\n' + code)
+            modified_files.append("File: " + filename + "\n" + "\n".join(numbered_code))
 
         return modified_files
 
