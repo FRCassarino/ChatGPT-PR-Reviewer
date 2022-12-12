@@ -1,6 +1,7 @@
 from ast import List
 import base64
 import json
+import re
 import requests
 from patch import fromstring
 import urllib
@@ -14,6 +15,7 @@ with open('config.json', 'r') as config_file:
   config = json.load(config_file)
 
 class RequestHandler(BaseHTTPRequestHandler):
+    
     def do_POST(self):
         # Get the length of the request body
         content_length = int(self.headers['Content-Length'])
@@ -38,6 +40,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             data = json.loads(data)  
         except json.decoder.JSONDecodeError as err:
             print(f'Error parsing JSON: {err}')
+            
             return
 
         # Extract the pull request information from the data
@@ -48,12 +51,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # Review the pull request
         review = self.review_pull_request(modified_files)
-        print("Review: ")
-        print(review)
+        print("Review: " + review)
 
         # Post the review as a comment in the pull request
         self.post_review_as_comment(review, pull_request)
-        print("Posted review as comment")
 
     def create_modified_files_array(self, pull_request):
         # Initialize the modified files array
@@ -74,13 +75,13 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         # Iterate over the parsed patch file and get the code for each modified file
         for hunk in patch:
+
             # Use the hunk.target attribute to get the path of the modified file
-            filename = hunk.target 
-           
-           
+            filename = hunk.target.decode('utf-8')
+            
             # Use the GitHub API to get the contents of the modified file
             url = f'https://api.github.com/repos/{owner}/{repo}/contents/main.py'
-            headers = {'Authorization': 'token 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'}
+            headers = {'Authorization': 'token ' + config["github_token"]}
             try:
                 response = requests.get(url, headers=headers)
                 data = response.json()
@@ -91,8 +92,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             # Decode the base64 encoded content of the file
             code = base64.b64decode(data['content']).decode('utf-8')
 
-            # Add the code to the modified files array
-            modified_files.append(code)
+            # Add the filename and code to the modified files array
+            modified_files.append('File:' + filename + '\n' + code)
 
         return modified_files
 
@@ -104,12 +105,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 
       # Send the modified files to the chatbot
       for file in modified_files:
-          print("File: " + file)
           print(chatbot.get_chat_response(file, output="text"))
 
       # Ask the chatbot to review the pull request
-      review = chatbot.get_chat_response("For the code I pasted, find code smells or questionable technical decisions, identify bugs and explain issues. \nStructure this as a list of items, ranked by importance. \nThis does NOT require you to browse  the internet or analyze specific code files.", output="text")
-
+      review = chatbot.get_chat_response("For the code I pasted, find code smells or questionable technical decisions, identify bugs and explain issues. \nStructure this as a list of items, ranked by importance. Each item should be in the format [<FILENAME>, <LINE_OF_CODE>]: <ITEM_TEXT>. \nThis does NOT require you to browse  the internet or analyze specific code files.", output="text")
+    
       # Return the chatbot's review
       return review['message']
 
@@ -120,26 +120,32 @@ class RequestHandler(BaseHTTPRequestHandler):
       number = pull_request['number']
 
       # Set the URL for creating a new comment on the pull request
-      url = f'https://api.github.com/repos/{owner}/{repo}/issues/{number}/comments'
+      url = f'https://api.github.com/repos/{owner}/{repo}/pulls/{number}'
+      lines = review.split('\n')
 
-      # Set the request payload
-      payload = {
-          'body': review
-      }
+      # Compile a regular expression to match the file and line number pattern
+      pattern = re.compile(r'\[(.+), line (\d+)\]:')
 
-      # Set the request headers
-      headers = {
-          'Authorization': 'token ' + config["github_token"],
-          'Content-Type': 'application/json'
-      }
+      for line in lines:
+        # Check if the line is a comment
+        if pattern.match(line):
+            # Extract the file and line number from the line
+            file, line_number = pattern.findall(line)[0]
 
-      # Send a POST request to create the comment
-      try:
-          response = requests.post(url, json=payload, headers=headers)
-      except requests.RequestException as err:
-          print(f'Error posting review as comment: {err}')
-          return
-
+            # Use the GitHub API to post the comment in the specified file and line
+            comment_url = f'{url}/comments'
+            body = {
+                'body': line,
+                'commit_id': pull_request['head']['sha'],
+                'path': file,
+                'line': int(line_number),
+            }
+            headers = {'Authorization': 'token ' + config["github_token"]}
+            try:
+                response = requests.post(comment_url, json=body, headers=headers)
+            except requests.RequestException as err:
+                print(f'Error posting comment: {err}')
+                return
 
 httpd = HTTPServer(('localhost', 8000), RequestHandler)
 httpd.serve_forever()
