@@ -1,5 +1,4 @@
 import base64
-from http.server import BaseHTTPRequestHandler
 import json
 import re
 import requests
@@ -13,21 +12,7 @@ with open('config.json', 'r') as config_file:
   config = json.load(config_file)
 
 
-class RequestHandler(BaseHTTPRequestHandler):
-    def do_POST(self):
-    
-        # Read the request body
-        content_length = int(self.headers['Content-Length'])
-        body = self.rfile.read(content_length)
-        
-        # Handle the webhook
-        self.handle_webhook(body.decode('utf-8'))
-        
-        # Send a response
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"Received POST request")
-
+class RequestHandler:
     def handle_webhook(self, body):
 
         # Parse the data as a JSON object
