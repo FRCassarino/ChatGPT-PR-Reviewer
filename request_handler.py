@@ -20,7 +20,7 @@ config = {
     "cf_clearance": os.environ.get('CF_CLEARANCE') or local_config['cf_clearance'],
 }
 
-mock_review = "[app.py, line 10]: The value of the session_token key in the config dictionary is not defined.\n[app.py, line 24]: The send_response method is called with a hardcoded value of 200. It is better to use one of the pre-defined constants from the http.server module, such as HTTPStatus.OK, instead of a hardcoded value.\n[app.py, line 25]: The end_headers method is called after the response has been sent, but it should be called before the response is sent.\n[app.py, line 27]: The write method is used to write the response body, but it should be used with a binary string, not a regular string. The string needs to be encoded as binary before it is written to the response.\n[app.py, line 45]: The modified_files array is printed to the console, but it is not used anywhere else in the code. It would be better to either use it in another part of the code, or remove it entirely.\n[app.py, line 60]: The patch_file variable is assigned the result of calling the get method from the requests module, but this variable is never used in the code. It would be better to either use this variable, or remove the assignment statement.\n[app.py, line 75]: There is no return statement in the create_modified_files_array method, so the method will always return None. It would be better to either add a return statement at the end of the method, or change the method to be a void method."
+mock_review = "[main.py, line 10]: The value of the session_token key in the config dictionary is not defined.\n[main.py, line 24]: The send_response method is called with a hardcoded value of 200. It is better to use one of the pre-defined constants from the http.server module, such as HTTPStatus.OK, instead of a hardcoded value.\n[main.py, line 25]: The end_headers method is called after the response has been sent, but it should be called before the response is sent.\n[main.py, line 27]: The write method is used to write the response body, but it should be used with a binary string, not a regular string. The string needs to be encoded as binary before it is written to the response.\n[main.py, line 45]: The modified_files array is printed to the console, but it is not used anywhere else in the code. It would be better to either use it in another part of the code, or remove it entirely.\n[main.py, line 60]: The patch_file variable is assigned the result of calling the get method from the requests module, but this variable is never used in the code. It would be better to either use this variable, or remove the assignment statement.\n[main.py, line 75]: There is no return statement in the create_modified_files_array method, so the method will always return None. It would be better to either add a return statement at the end of the method, or change the method to be a void method."
 should_mock = True
 class RequestHandler:
     def handle_webhook(self, body):
@@ -112,7 +112,7 @@ class RequestHandler:
         # Check if the line is a comment
         if pattern.match(line):
             # Extract the file and line number from the line
-            file, line_number = pattern.findall(line)[0]            
+            file, line_number = pattern.findall(line)[0]    
             github_api.post_review_item_as_comment(line, pull_request, file, line_number)
 
     

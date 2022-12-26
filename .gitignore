@@ -1681,3 +1681,4 @@ venv/pyvenv.cfg
 node_modules/.yarn-integrity
 yarn.lock
 .ebextensions/config.json
+config.json
