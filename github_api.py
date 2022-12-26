@@ -3,7 +3,7 @@ import requests
 
 class GitHubAPI:
     def __init__(self, token):
-        self.token = token
+        self.token = token  
 
     def post_review_item_as_comment(self, reviewItem, pull_request, file, line_number):
         # Get the repository information from the pull request
@@ -21,15 +21,18 @@ class GitHubAPI:
 
         # Set the request body
         body = {
-                'body': reviewItem,
-                'commit_id': pull_request['head']['sha'],
-                'path': file,
-                'line': int(line_number),
+                "body": reviewItem,
+                "commit_id": pull_request['head']['sha'],
+                "path": file,
+                "line": int(line_number),
             }
+
+        #to json
+        body = json.dumps(body)
 
         try:
             # Make a POST request to the comments endpoint
-            requests.post(comment_url, headers=headers, data=body)
+            result = requests.post(comment_url, headers=headers, data=body)
         except requests.RequestException as err:
             print(f'Error posting review item as comment: {err}')
             return

@@ -6,10 +6,16 @@ from patch import fromstring
 import urllib
 from revChatGPT.revChatGPT import Chatbot
 from github_api import GitHubAPI
+import os
+
 
 # Load the configuration from the JSON file
-with open('config.json', 'r') as config_file:
-  config = json.load(config_file)
+#with open('config.json', 'r') as config_file:
+#  config = json.load(config_file)
+
+config = {
+    "github_token": os.environ.get('GITHUB_TOKEN')
+}
 
 
 class RequestHandler:
@@ -29,7 +35,8 @@ class RequestHandler:
         changed_files = self.changed_files(pull_request)
 
         # Use ChatGPT to generate a review for the pull request
-        review = self.generate_review(changed_files)
+        #review = self.generate_review(changed_files)
+        review = '[main.py, line 10]: asdf sdf'
         print("Pull Request Review: " + review)
 
         # Post the review as a comment in the pull request
@@ -95,9 +102,7 @@ class RequestHandler:
     def post_review(self, review, pull_request):
     
       github_api = GitHubAPI(config["github_token"])
-
       lines = review.split('\n')
-
       # Compile a regular expression to match the file and line number pattern
       pattern = re.compile(r'\[(.+), line (\d+)\]:')
 
@@ -107,3 +112,6 @@ class RequestHandler:
             # Extract the file and line number from the line
             file, line_number = pattern.findall(line)[0]            
             github_api.post_review_item_as_comment(line, pull_request, file, line_number)
+
+    
+    
