@@ -16,8 +16,6 @@ with open('config.json', 'r') as config_file:
 config = {
     "github_token": os.environ.get('GITHUB_TOKEN') or local_config['github_token'],
     "session_token": os.environ.get('SESSION_TOKEN') or local_config['session_token'],
-    "user_agent": os.environ.get('USER_AGENT') or local_config['user_agent'],
-    "cf_clearance": os.environ.get('CF_CLEARANCE') or local_config['cf_clearance'],
 }
 
 mock_review = "[main.py, line 10]: The value of the session_token key in the config dictionary is not defined.\n[main.py, line 24]: The send_response method is called with a hardcoded value of 200. It is better to use one of the pre-defined constants from the http.server module, such as HTTPStatus.OK, instead of a hardcoded value.\n[main.py, line 25]: The end_headers method is called after the response has been sent, but it should be called before the response is sent.\n[main.py, line 27]: The write method is used to write the response body, but it should be used with a binary string, not a regular string. The string needs to be encoded as binary before it is written to the response.\n[main.py, line 45]: The modified_files array is printed to the console, but it is not used anywhere else in the code. It would be better to either use it in another part of the code, or remove it entirely.\n[main.py, line 60]: The patch_file variable is assigned the result of calling the get method from the requests module, but this variable is never used in the code. It would be better to either use this variable, or remove the assignment statement.\n[main.py, line 75]: There is no return statement in the create_modified_files_array method, so the method will always return None. It would be better to either add a return statement at the end of the method, or change the method to be a void method."
@@ -88,7 +86,6 @@ class RequestHandler:
     def generate_review(self, changed_files):
       # Create a Chatbot instance
       chatbot = Chatbot(config)
-
       chatbot.get_chat_response("We're going to do an exercise. Imagine these are a series of coding files that belong to a Github Pull Request. Please simply write ACKNOWLEDGE, and write a short summary of what each file does. I will send the first file after this message. Please respond now with ACKNOWLEDGE", output="text")
 
       # Send the changed files to the chatbot

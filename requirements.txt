@@ -1,4 +1,4 @@
 Flask==2.0.3
-revChatGPT==0.0a42
+revChatGPT==0.0.45.1
 requests==2.26.0
 patch==1.16

@@ -1682,3 +1682,12 @@ node_modules/.yarn-integrity
 yarn.lock
 .ebextensions/config.json
 config.json
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/entry_points.txt
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/INSTALLER
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/LICENSE
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/METADATA
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/RECORD
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/REQUESTED
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/top_level.txt
+venv/lib/python3.8/site-packages/revChatGPT-0.0.45.1.dist-info/WHEEL
+venv/lib/python3.8/site-packages/revChatGPT/ChatGPT.py
