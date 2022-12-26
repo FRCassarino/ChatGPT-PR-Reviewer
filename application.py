@@ -15,5 +15,5 @@ def handle_webhook():
 
    return "Received POST request"
 
-if __name__ == '__app__':
+if __name__ == '__main__':
    app.run()
