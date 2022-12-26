@@ -10,13 +10,15 @@ import os
 
 
 # Load the configuration from the JSON file
-#with open('config.json', 'r') as config_file:
-#  config = json.load(config_file)
+with open('config.json', 'r') as config_file:
+  local_config = json.load(config_file)
 
 config = {
-    "github_token": os.environ.get('GITHUB_TOKEN')
+    "github_token": os.environ.get('GITHUB_TOKEN') or local_config['github_token'],
+    "session_token": os.environ.get('SESSION_TOKEN') or local_config['session_token'],
+    "user_agent": os.environ.get('USER_AGENT') or local_config['user_agent'],
+    "cf_clearance": os.environ.get('CF_CLEARANCE') or local_config['cf_clearance'],
 }
-
 
 class RequestHandler:
     def handle_webhook(self, body):
