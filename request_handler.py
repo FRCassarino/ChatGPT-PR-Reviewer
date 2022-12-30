@@ -81,7 +81,21 @@ class RequestHandler:
             code = base64.b64decode(data['content']).decode(
                 'utf-8').splitlines()
 
-            numbered_code = [f'{i+1} {line}' for i, line in enumerate(code)]
+            numbered_code = [f'{i+1} {line}' for i, line in enumerate(code)]            
+
+            # Add the '++' sign to lines that were added or modified in the patch
+            for hunk in patch.hunks:
+                for line in hunk.text:
+                    if line.decode('utf-8').startswith('+'):
+                        decoded_line = line[1:].decode().rstrip()
+                        # Find the line in the numbered_code list by matching the code
+                        index = 0
+                        for numbered_line in numbered_code:
+                            #check if numbered_line contains the line AND if the line is not empty
+                            if decoded_line in numbered_line and decoded_line != "":
+                                # add the ++ to the line but after the line number
+                                numbered_code[index] = f'++{numbered_line}'
+                            index += 1
 
             # Add the filename and code to the changed files array
             changed_files.append("File: " + filename +
