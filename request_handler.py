@@ -7,6 +7,11 @@ import urllib
 from revChatGPT.ChatGPT import Chatbot
 from github_api import GitHubAPI
 import os
+import ChatGPT_lite.ChatGPT as ChatbotLite
+import argparse
+import sys
+import asyncio
+
 
 from gpt3 import GPT3API
 
@@ -122,15 +127,35 @@ class RequestHandler:
                 print(chatbot.ask(file))
 
             # Ask the chatbot to review the pull request
-            review = chatbot.ask(request_prompt)
+            review = chatbot.ask(request_prompt)['message']
         elif config["api"] == "gpt3":
             # Create a GPT3 instance
             gpt3 = GPT3API(config["gpt3_token"]) 
 
             # In this case, we're going to use the GPT3 API to generate a review all at once
             review = gpt3.generate_response("\n".join(changed_files) + "\n" + request_prompt + "\n[") 
+        elif config["api"] == "chatgptlite":
+            chatbot = ChatbotLite.Chatbot(config['session_token'])
+            try: 
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                loop.run_until_complete(chatbot.wait_for_ready())
+                loop.run_until_complete(chatbot.ask(initial_prompt))
+                
+                # Send the changed files to the chatbot
+                for file in changed_files:
+                    # Temporary hack to keep things running while the API gets fixed to handle special characters
+                    file = re.sub('[^A-Za-z0-9]+', '', file.replace('\n', '                                                               '))
+                    loop.run_until_complete(chatbot.ask(file))
+                
+                # Ask the chatbot to review the pull request
+                review = loop.run_until_complete(chatbot.ask(request_prompt))['answer']
+
+                chatbot.close()
+            except Exception as e:  
+                chatbot.close()
+                raise Exception(e)
         print(review)
-        # Return the chatbot's review
         return review
 
     def post_review(self, review, pull_request):
